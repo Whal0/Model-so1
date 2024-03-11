@@ -86,11 +86,11 @@ print(df.to_string(), "\n")
 print(proportions(model))
 match = 0
 cycles = 0
-print("\nPierwsze 10 zgodnych par.\n")
+print("\nPełna symulacja.\n")
 
 timer_start = time.time()
 
-while 0.1 <= proportions(model) <= 95.0:
+while 0.1 <= proportions(model) <= 99.9:
     check = checkPair(model)
 
     if type(check) is tuple:
