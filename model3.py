@@ -35,11 +35,7 @@ def checkPair(array):
     cols = len(array[0])
 
     row_index = random.randint(0, rows - 1)
-    col_index = random.randint(0, cols - 1)  # -2 zeby istnial kolejny elementY
-    # TODO: sprawdz krawedzie:
-    # array[row_index][col_index] == array[row_index][(col_index + 1) % cols] or
-    # array[row_index][col_index] == array[(row_index + 1) % rows][col_index]:
-    # col_index = random.randint(0, cols - 1)
+    col_index = random.randint(0, cols - 1)
     if array[row_index][col_index] == array[row_index][(col_index + 1) % cols] or \
             array[row_index][col_index] == array[(row_index + 1) % rows][col_index] or \
             array[row_index][col_index] == array[row_index][(col_index - 1) % cols] or \
@@ -70,8 +66,7 @@ while match < 10:
             print(f"Pozycja pary: ({aa[0]}, {aa[1]}), ({aa[0]}, 0)")
         else:
             print(f"Pozycja pary: ({aa[0]}, {aa[1]}), ({aa[0]}, {aa[1] + 1})")
-
-cycles += 1
+    cycles += 1
 
 print("\nCykle wykonane:", cycles)
 
