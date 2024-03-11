@@ -76,8 +76,8 @@ def changeOpinion(array, row_index, col_index, next_row, next_col):
 
             array[new_row][new_col] = target
 
-rows = 10
-cols = 10
+rows = 20
+cols = 20
 probability = 0.5
 model = create2dArrayBalanced(rows, cols, probability)
 
@@ -104,6 +104,10 @@ while 0.1 <= proportions(model) <= 99.9:
 
         print(f"Procent 1'ek: {proportions(model)}%\n")
 
+    timer_check = time.time() - timer_start
+    if timer_check > 600:
+        print("Mineło 10 minut")
+        break
     cycles += 1
 
 timer_end = time.time()
