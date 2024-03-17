@@ -1,4 +1,5 @@
 import random
+import os
 import numpy as np
 import pandas as pd
 
@@ -100,8 +101,17 @@ while match < 10:
         print(df.to_string())
 
         print(f"Procent 1'ek: {proportions(model)}%\n")
-
+        
+        if os.path.exists("zad1_wyniki.txt"):
+            with open("zad1_wyniki.txt", 'a', encoding='utf-8') as file:
+                file.write(f"Para: ({check[0]},{check[1]}) ({check[2]},{check[3]}) Procent aktorów \"na tak\": {proportions(model)}" + '\n')
+        else:
+            with open("zad1_wyniki.txt", 'w', encoding='utf-8') as file:
+                file.write(f"Para: ({check[0]},{check[1]}) ({check[2]},{check[3]}) Procent aktorów \"na tak\": {proportions(model)}" + '\n')
     cycles += 1
+
+
+
 
 print("\nCykle wykonane:", cycles)
 

@@ -1,7 +1,10 @@
 import random
+import os
+import time
+
 import numpy as np
 import pandas as pd
-import time
+import matplotlib.pyplot as plt
 
 
 def create2dArray(rows, cols, probability):
@@ -64,6 +67,8 @@ def checkPair(array):
 
 
 def changeOpinion(array, row_index, col_index, next_row, next_col):
+    rows = len(array)
+    cols = len(array[0])
     target = array[row_index][col_index]
     neighbours = ((0, 1), (0, -1), (1, 0), (-1, 0))
     pair = ((row_index, col_index), (next_row, next_col))
@@ -76,45 +81,76 @@ def changeOpinion(array, row_index, col_index, next_row, next_col):
 
             array[new_row][new_col] = target
 
-rows = 20
-cols = 20
-probability = 0.5
-model = create2dArrayBalanced(rows, cols, probability)
 
-df = pd.DataFrame(model)
-print(df.to_string(), "\n")
-print(proportions(model))
-match = 0
-cycles = 0
-print("\nPełna symulacja.\n")
+def displayModel(model):
+  rows = len(model)
+  cols = len(model[0])
+  result = ''
+  for row in range(rows):
+    for col in range(cols):
+      result += f"{model[row][col]} "
+    result += '\n'
+  print(result)
 
-timer_start = time.time()
 
-while 0.1 <= proportions(model) <= 99.9:
-    check = checkPair(model)
+def runSim(prob):
+  
+  # Simulation variables, end conditions, things to keep
+  for element in prob:
+    rows = 20
+    cols = 20
+    probability = element
+    match = 0
+    cycles = 1
+    proportion_list = []
 
-    if type(check) is tuple:
+    model = create2dArrayBalanced(rows, cols, probability)
+    displayModel(model)
+    print(proportions(model))
+    proportion_list.append(probability * 100)
+    
+    print("\nPełna symulacja z prawdopodobienstwem:", probability)
+
+    while 0.1 <= proportions(model) <= 99.9:
+      check = checkPair(model)
+
+      if type(check) is tuple:
         match += 1
 
         print(f"Pozycja pary: ({check[0]}, {check[1]}), ({check[2]}, {check[3]})")
         changeOpinion(model, check[0], check[1], check[2], check[3])
-
-        df = pd.DataFrame(model)
-        print(df.to_string())
+        displayModel(model)
 
         print(f"Procent 1'ek: {proportions(model)}%\n")
 
-    timer_check = time.time() - timer_start
-    if timer_check > 600:
-        print("Mineło 10 minut")
-        break
-    cycles += 1
+      cycles += 1
+      proportion_list.append(proportions(model))
 
-timer_end = time.time()
-timer_result = round(timer_end-timer_start,2)
-print("\nWykonane cykle:", cycles, "w",timer_result,"sekund.")
 
-# np.set_printoptions(threshold=np.inf)
-# print(np.matrix(model))
-# df = pd.DataFrame(model)
-# print(df.to_string())
+    print("\nWykonane iteracje:", cycles)
+
+    x = list(range(cycles))
+    plt.plot(x, proportion_list, label=f"{element}")
+    plt.xlabel("Iteracje")
+    plt.ylabel("Procent aktorów \"na tak\"")
+    plt.legend()
+    plt.title("Zmiana frakcji aktorów w trakcie symulacji")
+    plt.savefig('graph {}.png'.format(element))
+
+    # TEST wypisanie ilosci aktorow na tak z kazdego cyklu
+    # if os.path.exists("zad2_wyniki_test.csv"):
+    #     with open("zad2_wyniki.csv", 'a') as file:
+    #         file.write(','.join(map(str, proportion_list)) + '\n')
+    # else:
+    #     with open("zad2_wyniki_test.csv", 'w') as file:
+    #         file.write(','.join(map(str, proportion_list)) + '\n')
+
+    if os.path.exists("zad2_wyniki.txt"):
+        with open("zad2_wyniki.txt", 'a', encoding="utf-8") as file:
+            file.write(f"Symulacja z początkowym frakcją aktorów \"1\": {element}. Końcowy procent aktorów na \"1\": {proportion_list[-1]} osiągniety po {cycles} krokach" + '\n')
+    else:
+        with open("zad2_wyniki.txt", 'w', encoding="utf-8") as file:
+            file.write(f"Symulacja z początkowym frakcją aktorów \"1\": {element}. Końcowy procent aktorów na \"1\": {proportion_list[-1]} osiągniety po {cycles} krokach" + '\n')
+
+
+runSim([0.1,0.25,0.5,0.75,0.9])
