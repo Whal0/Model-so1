@@ -1,5 +1,0 @@
-Prob: 0.1, Ilość symulacji: 10, Średnia: 0.025, Odchylenie: 0.08
-Prob: 0.25, Ilość symulacji: 10, Średnia: 0.0, Odchylenie: 0.0
-Prob: 0.5, Ilość symulacji: 10, Średnia: 45.4, Odchylenie: 39.39
-Prob: 0.75, Ilość symulacji: 10, Średnia: 100.0, Odchylenie: 0.0
-Prob: 0.9, Ilość symulacji: 10, Średnia: 100.0, Odchylenie: 0.0
